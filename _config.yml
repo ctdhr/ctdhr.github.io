@@ -1,1 +1,20 @@
-theme: jekyll-theme-dinky
+theme: minima
+title: Infosec adventures
+author: ctdhr
+description: Short description of my awesome site
+
+
+show_excerpts: true
+
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "" # the base hostname & protocol for your site, e.g. http://example.com
+linkedin_username: daherk
+github_username:  ctdhr
+
+
+header_pages:
+  - pages/contact.md
+
+plugins:
+ - jekyll-feed
+ - jekyll-seo-tag
