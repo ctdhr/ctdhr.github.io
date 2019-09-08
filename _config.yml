@@ -1,7 +1,7 @@
 theme: minima
-title: Infosec adventures
+title: ctdhr / infosec
 author: ctdhr
-description: Short description of my awesome site
+description: A blue-teamer's life in IT security
 
 
 show_excerpts: true
@@ -11,9 +11,11 @@ url: "" # the base hostname & protocol for your site, e.g. http://example.com
 linkedin_username: daherk
 github_username:  ctdhr
 
+minima:
+  date_format: "%b %-d, %Y"
 
 header_pages:
-  - pages/contact.md
+  - pages/about.md
 
 plugins:
  - jekyll-feed

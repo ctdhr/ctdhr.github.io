@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>Handling logs on AWS | ctdhr / infosec</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Handling logs on AWS" />
+<meta name="author" content="ctdhr" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A blue-teamer’s life in IT security" />
+<meta property="og:description" content="A blue-teamer’s life in IT security" />
+<link rel="canonical" href="http://localhost:4000/pages/2019-08-19-aws_logs.html" />
+<meta property="og:url" content="http://localhost:4000/pages/2019-08-19-aws_logs.html" />
+<meta property="og:site_name" content="ctdhr / infosec" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-08-19T00:00:00+02:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","headline":"Handling logs on AWS","dateModified":"2019-08-19T00:00:00+02:00","datePublished":"2019-08-19T00:00:00+02:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/pages/2019-08-19-aws_logs.html"},"url":"http://localhost:4000/pages/2019-08-19-aws_logs.html","author":{"@type":"Person","name":"ctdhr"},"description":"A blue-teamer’s life in IT security","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="ctdhr / infosec" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">ctdhr / infosec</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/pages/about.html">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Handling logs on AWS</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2019-08-19T00:00:00+02:00" itemprop="datePublished">Aug 19, 2019
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h6 id="this-article-was-originally-published-on-polyconseils-tech-blog">This article was originally published on <a href="https://tech.polyconseil.fr/handling-logs-on-aws.html">Polyconseil’s tech blog</a>.</h6>
+
+<p>As we migrate our IT systems to the <a href="https://aws.amazon.com/">AWS</a> cloud, it is imperative for us to be able to monitor their health and security. AWS does provide a range of tools for logging, however they feel fragmented and balky at times. Looking through logs in the dedicated AWS services was awkward at best, frustrating at worst, and definitely time-consuming. We needed a centralised, robust log storage and management infrastructure that we could control. So I built one!</p>
+
+<h2 id="why-need-needed-something-else">Why need needed something else</h2>
+
+<p>To best describe why we felt limited by AWS’ “default” logging services, we will look at a few real world cases.</p>
+
+<h3 id="the-logon-logs">The logon logs</h3>
+
+<p>At some point, I needed to check who logged onto the AWS web console and what <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html">IAM role</a> they were using. A simple enough task. All I need to do is use <a href="https://aws.amazon.com/cloudtrail/">CloudTrail</a>.</p>
+
+<p>So I login, go to CloudTrail, and look at a large table of indecipherable resource and user UIDs.</p>
+
+<p><img src="images/aws_logs_cloudtrail.png" alt="CloudTrail table" /></p>
+
+<p>As it happens, I was interested in a few different columns, so I displayed them in that table. The already overloaded table became totally unusable. I downloaded the exportable CSV file and filtered it with Excel. Unfortunately though, I could not find what I was looking for in that file. Why? I was using CloudTrail in the wrong region, obviously.</p>
+
+<p>This work flow is not optimal.</p>
+
+<h3 id="the-data-transfer-health-check">The data transfer health-check</h3>
+
+<p>We use AWS <a href="https://aws.amazon.com/kinesis/data-firehose/">Kinesis Firehose</a> to transfer data from point A to point B. To check the pipeline’s health, Firehose’s home page provides a monitoring tab that looks like this:</p>
+
+<p><img src="images/aws_logs_firehose.png" alt="Firehose health monitoring" /></p>
+
+<p>A fine dashboard, that only goes 7 days back. If you want to check your pipeline’s health over a longer time span, you’ll need to go to CloudWatch.</p>
+
+<p>Again, this is not bad, it works when you have few things to monitor, but it does not scale well.</p>
+
+<h3 id="the-kubernetes-logs">The kubernetes logs</h3>
+
+<p>We use AWS’ managed <a href="https://kubernetes.io/">Kubernetes</a> solution, <a href="https://aws.amazon.com/eks/">Elastic Kubernetes Service</a>. EKS dumps its logs in <a href="https://docs.aws.amazon.com/">CloudWatch Logs</a>, and it has a whole lot of them.</p>
+
+<p>The default CloudWatch Logs view of a given log stream looks like this.</p>
+
+<p><img src="images/aws_logs_cwl.png" alt="CloudWatch Logs table" /></p>
+
+<p>I would personally prefer not to be reading that all day long.</p>
+
+<blockquote>
+  <p><strong>What do we do now?</strong></p>
+
+  <p>JSON log one-liners are better off on some disk somewhere than on your screen. We’re used to neat monitoring solutions such as <a href="https://prometheus.io/">Prometheus</a> and <a href="https://www.splunk.com/">Splunk</a>. We would like to keep using them. So all we need to do now is feed them with all those new AWS logs.</p>
+</blockquote>
+
+<h2 id="our-log-management-infrastructure">Our log management infrastructure</h2>
+
+<h3 id="requirements">Requirements</h3>
+
+<p>As a security engineer, my “security” requirements are the following:</p>
+
+<ul>
+  <li>All logs must be stored in a central repository</li>
+  <li>The central repository must be redundant</li>
+  <li>No data loss</li>
+  <li>Engineers must not have write access to the repository (a special permission is required)</li>
+  <li>Log rotation must be automated (data protection authorities put a lot of emphasis on deleting old data)</li>
+</ul>
+
+<h3 id="storage-solution-choice">Storage solution choice</h3>
+
+<p>Given the above requirements, I could already see that our log management system would at least have a storage base (datalake, datahub, call it what you will) and a processing factory that would provide the dashboards and search capabilities.</p>
+
+<p>I started looking for the most cost-effective log storage solutions to the requirements above. <a href="https://aws.amazon.com/s3/">AWS S3</a> was a prime candidate.
+Creating multiple S3 buckets for log storage is simple. AWS provides S3 bucket <a href="https://docs.aws.amazon.com/">replication within its regions</a>, and guarantees 99.999999999% durability and 99.99% availability thus ensuring the logs’ safety. Encryption and rotation are also quite simple to automate in S3 buckets.</p>
+
+<p>So we took the S3 route for log storage.</p>
+
+<h3 id="sources">Sources</h3>
+
+<p>Let’s now look at our log producing sources.</p>
+
+<p>Since we were looking to build a cloud native system as we migrate towards the cloud, we’ve integrated AWS managed services in our environment. Here’s a non-exhaustive list of the services that we use:</p>
+
+<ul>
+  <li>Route53</li>
+  <li>Config</li>
+  <li>RDS</li>
+  <li>ECR</li>
+  <li>EKS</li>
+  <li>ElasticSearch</li>
+</ul>
+
+<p>These services dump their logs to different AWS logging services, instead of having a single one. As a result, AWS log handling might look like a hodgepodge to the untrained eye. So let’s try to clear things out.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Log source</th>
+      <th>Destination</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/query-logs.html#query-logs-configuring">Route53</a></td>
+      <td>CloudWatch Logs</td>
+    </tr>
+    <tr>
+      <td><a href="https://docs.aws.amazon.com/config/latest/developerguide/how-does-config-work.html">Config</a></td>
+      <td>Directly to S3</td>
+    </tr>
+    <tr>
+      <td><a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html">RDS</a></td>
+      <td>CloudWatch Logs</td>
+    </tr>
+    <tr>
+      <td><a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/logging-using-cloudtrail.html">ECR</a></td>
+      <td>CloudTrail</td>
+    </tr>
+    <tr>
+      <td><a href="https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html">EKS</a></td>
+      <td>CloudWatch Logs</td>
+    </tr>
+    <tr>
+      <td><a href="https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-managedomains-cloudtrailauditing.html">ElasticSearch</a></td>
+      <td>CloudTrail</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>We also have a fair amount of <a href="https://aws.amazon.com/ec2/">EC2 instances</a> running on our <a href="https://aws.amazon.com/vpc/">VPCs</a>. For the sake of simplicity, we will imagine that they’re all configured to send their logs to a single <a href="https://en.wikipedia.org/wiki/Syslog">syslog server</a>, that is also hosted on an EC2 instance.</p>
+
+<p>In short, we can say that all our logs come from 4 different sources:</p>
+
+<ol>
+  <li>CloudWatch Logs</li>
+  <li>CloudTrail</li>
+  <li>Config</li>
+  <li>The syslog server</li>
+</ol>
+
+<p>Connecting them to S3 reliably and securely while respecting our <a href="https://www.digitalocean.com/community/tutorials/what-is-immutable-infrastructure">immutable infrastructure philosophy</a> is the fun part. Let’s delve into it.</p>
+
+<h3 id="technical-architecture">Technical architecture</h3>
+
+<p>The aim now is to build a pipeline between each of these sources and an S3 bucket.</p>
+
+<h4 id="cloudwatch-logs">CloudWatch Logs</h4>
+
+<p>CloudWatch Logs groups data in <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/Working-with-log-groups-and-streams.html">log groups</a> of multiple log streams. While CloudWatch Logs does not provide a default way of publishing logs to S3, it does provide a way to send logs to a <a href="https://aws.amazon.com/kinesis/data-firehose/">Kinesis Firehose</a> thanks to a <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/SubscriptionFilters.html">subscription filter</a>. And as it happens, Firehose can dump data into S3. All that remains to get the logs flowing is to create the appropriate <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html">IAM roles</a>, which will be assumed by the subscription filter and the Firehose resources, as well as an adequate S3 <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/example-bucket-policies.html">bucket policy</a>.</p>
+
+<h4 id="cloudtrail">CloudTrail</h4>
+
+<p>CloudTrail logs all API calls made to your resources, and calls them “trails”. Thankfully AWS has already done the plumbing work to pipe your trails to an S3 bucket with little work on our part. Just set a destination bucket with the correct bucket policy for the trail you want and wait for the magic to happen.</p>
+
+<h4 id="config">Config</h4>
+
+<p>The same goes for AWS Config. Provide a bucket with a policy that allows Config to dump logs to it, create a <a href="https://docs.aws.amazon.com/config/latest/developerguide/stop-start-recorder.html">configuration recorder</a> and a <a href="https://docs.aws.amazon.com/config/latest/developerguide/manage-delivery-channel.html">delivery channel</a>, and the latter will ship all your logs to S3.</p>
+
+<h4 id="the-syslog-server">The syslog server</h4>
+
+<p>As for the EC2 logs, the log collection server needs to handle both syslog inputs and S3 outputs. <a href="https://www.fluentd.org/">FluentD</a> does that thanks to the <a href="https://docs.fluentd.org/input/syslog">in_syslog</a> and <a href="https://docs.fluentd.org/output/s3">out_s3</a> plugins, so we went with that.</p>
+
+<h4 id="architecture-overview">Architecture overview</h4>
+
+<p><img src="images/aws_logs_archilogsaws3_noaccounts.png" alt="Log ingestion architecture" /></p>
+
+<h4 id="to-s3-and-beyond">To S3 and beyond</h4>
+
+<p>As previously stated, we use multiple monitoring tools. Downloading batches of files from S3 and grepping them was not going to cut it. Luckily, most software has some kind of mechanism to fetch logs from S3. <a href="https://splunkbase.splunk.com/app/1876/">Splunk has an add-on</a> that <a href="https://docs.splunk.com/Documentation/AddOns/released/AWS/ConfigureAWS">connects to an SQS queue</a> to get logs from an S3 bucket. <a href="https://www.elastic.co/">Elastic</a> has a <a href="https://www.elastic.co/guide/en/logstash/current/plugins-inputs-s3.html">similar plugin</a>.</p>
+
+<p>From here on in, it’s a matter of configuring your favourite log management app to handle what you’d like to send its way.</p>
+
+<h2 id="what-we-learned">What we learned</h2>
+
+<h3 id="security-stuff">Security stuff</h3>
+
+<h4 id="iam">IAM</h4>
+
+<p>IAM is hard. AWS makes it simpler with <a href="https://docs.aws.amazon.com/IAM/latest/APIReference/API_Operations.html">IAM actions</a>, which goes a long way towards really implementing <a href="https://en.wikipedia.org/wiki/Principle_of_least_privilege">least privilege access</a>. Our DevOps engineers do need some permissions to be able to work efficiently though, and those include permissions over S3 objects. That puts our S3 log buckets at risk if they were in the same <a href="https://aws.amazon.com/account/">AWS account</a> as production resources. I could use IAM <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html">boundaries</a>, but given the amount of resources we run, handling secure access policies would have been a bugfest.</p>
+
+<p>The simple solution to this problem is to move the log buckets elsewhere, to a separate <a href="https://aws.amazon.com/account/">AWS account</a> within the same <a href="https://aws.amazon.com/fr/organizations/">organisation</a>. The buckets in that account only allow write access to specific resources from the production account. As for read access, I chose to open it to any resource in the security account and to the resources that carry our monitoring tools. Though very tight IAM control to the log account is still necessary.</p>
+
+<h4 id="data-protection">Data protection</h4>
+
+<p>As per security best practices, I need to make sure logs are both encrypted and rotated at the end of their lifespan.</p>
+
+<p>Fortunately, encryption is merely a matter of ticking a box, and <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/object-lifecycle-mgmt.html">S3 lifecycle management</a> allows you to move or delete logs automatically. You can even set it to change storage tiers for cost optimisation purposes.</p>
+
+<h4 id="architecture-overview-1">Architecture overview</h4>
+
+<p><img src="images/aws_logs_archilogsaws3.png" alt="Log ingestion architecture" /></p>
+
+<h3 id="the-gotchas">The gotchas</h3>
+
+<p>Transferring data between 2 different AWS accounts adds a layer of complexity to your regular IAM roles and resource policies. To illustrate, I will focus here on the CloudWatch Logs to S3 through Firehose pipeline, as it was the trickiest.</p>
+
+<p>Connecting Firehose to an outside S3 bucket proved particularly finicky, because contrary to regular AWS services, the S3 bucket policy must not simply trust the Firehose service, but rather the role it assumes in the production account.</p>
+
+<p>You also have to make sure your S3 bucket policies provide read access to the resources you want, as well as write access to your log pipeline. While that may seem simple in theory, it took us a few lengthy hours of debugging to set straight.</p>
+
+<p>Last but not least, also make sure you set the <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user.html">trust policies</a> correctly on your IAM roles to only allow Firehose to write to the buckets.</p>
+
+<p>Here are a few code snippets that will hopefully help you replicate our Firehose log delivery pipeline at home.</p>
+
+<h4 id="iam-role-to-be-assumed-by-the-cloudwatch-logs-subscription-filter-to-send-logs-to-firehose">IAM role to be assumed by the CloudWatch Logs subscription filter to send logs to Firehose</h4>
+
+<p>IAM policy:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    {
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "firehose:Put*",
+                    "firehose:List*",
+                    "firehose:Describe*",
+                ],
+                "Resource": [
+                    "&lt;YOUR FIREHOSE ARN&gt;"   
+                ]   
+            }   
+        ]
+    }
+</code></pre></div></div>
+
+<p>Trust policy:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Principal": {
+            "Service": "logs.&lt;YOUR AWS REGION&gt;.amazonaws.com"
+          },
+          "Action": "sts:AssumeRole"
+        }
+      ]
+    }
+</code></pre></div></div>
+
+<h4 id="iam-role-to-be-assumed-by-firehose-to-send-logs-to-s3">IAM role to be assumed by Firehose to send logs to S3</h4>
+
+<p>IAM policy:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    {
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "s3:AbortMultipartUpload",
+                    "s3:GetBucketLocation",
+                    "s3:ListBucket",
+                    "s3:ListBucketMultipartUploads",
+                    "s3:PutObjectAcl",
+                    "s3:PutObject"
+                ],
+                "Resource": [
+                    "&lt;YOUR S3 BUCKET ARN&gt;",
+                    "&lt;YOUR S3 BUCKET ARN&gt;/*"
+                ]
+            }
+        ]
+    }
+</code></pre></div></div>
+
+<p>Trust policy:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "",
+          "Effect": "Allow",
+          "Principal": {
+            "Service": "firehose.amazonaws.com"
+          },
+          "Action": "sts:AssumeRole",
+          "Condition": {
+            "StringEquals": {
+              "sts:ExternalId": [
+                "&lt;YOUR PRODUCTION ACCOUNT ID&gt;"
+              ]
+            }
+          }
+        }
+      ]
+    }
+</code></pre></div></div>
+
+<h4 id="s3-bucket-policy">S3 bucket policy</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Principal": {
+                    "AWS": "&lt;YOUR FIREHOSE ASSUMED ROLE ARN&gt;"
+                },
+                "Action": [
+                    "s3:AbortMultipartUpload",
+                    "s3:GetBucketLocation",
+                    "s3:GetObject",
+                    "s3:ListBucket",
+                    "s3:ListBucketMultipartUploads",
+                    "s3:PutObject",
+                    "s3:PutObjectAcl"
+                ],
+                "Resource": [
+                    "&lt;YOUR S3 BUCKET ARN&gt;",
+                    "&lt;YOUR S3 BUCKET ARN&gt;/*"
+                ]
+            }
+        ]
+    }
+</code></pre></div></div>
+
+<h3 id="automate-or-die">Automate or die</h3>
+
+<p>If you try to do all of this manually in the AWS console, or with the CLI, you are going to have a bad time.
+There are too many resources, links, roles and policies to create and configure. Building the log pipeline for a new log source will take just as much time as the first log pipeline you built. This does not scale.</p>
+
+<p>In our cloud native environment, our systems are probably going to grow constantly. So we’ve stuck to a simple motto.</p>
+
+<blockquote>
+  <p><strong>Our cloud motto</strong></p>
+
+  <p>On the cloud, it’s either automated or it does not exist.</p>
+</blockquote>
+
+<p>I used <a href="https://www.terraform.io/">Terraform</a> to automate our log pipeline. This way, the development and debugging are done only once, and you can reliably and repeatably create all the resources for a log pipeline with a single command. This is also important to security minded folks like me, because it means fellow DevOps engineers have an easy time popping up the log infrastructure for a new service and are thus less likely to leave it indefinitely in their backlog.</p>
+
+<h3 id="its-not-perfect">It’s not perfect</h3>
+
+<p>Our AWS log pipeline is great. It does have quirks however.</p>
+
+<h4 id="delay">Delay</h4>
+
+<p>With our on-premise systems, we’re used to having logs transferred, ingested and processed instantaneously. That is not possible on the AWS cloud. <a href="https://aws.amazon.com/kinesis/data-firehose/faqs/">Firehose buffers</a> log delivery, so real-time log processing is not possible.</p>
+
+<h4 id="cost">Cost</h4>
+
+<p>When I built our log pipeline, we needed something that worked well quickly. So I optimised for security, not cost. S3 object lifecycle management helps a lot in that regard as it allows to move old data to cheaper storage. However, AWS logging services are not free, nor is Firehose.</p>
+
+<p>While this architecture is not particularly expensive, as part of our continuous AWS cost management efforts, we are currently looking for better cost saving measures.</p>
+
+<h2 id="takeaway">Takeaway</h2>
+
+<p>Sending logs to storage seems simple enough, yet it took us a while to figure out, as we had to build a cloud specific architecture.</p>
+
+<p>As a security engineer working with a large DevOps team, my main objective was to provide them with straightforward grab and go answers for all their logging needs. That is why I built a log management infrastructure on AWS using common AWS managed services to deliver logs to our ingest stations.</p>
+
+<p>AWS are always bringing new features and improvements to their services, so the ideal log management infrastructure is a moving target, but I think we can be proud of ours.</p>
+
+  </div><a class="u-url" href="/pages/2019-08-19-aws_logs.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+
+    	<div class="footer-col">
+    		<p>A blue-teamer&#39;s life in IT security</p>
+    	</div>
+
+		<div class="footer-col" style="float:right">      
+      		<div class="social-links"><ul class="social-media-list"><li><a href="https://github.com/ctdhr"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">ctdhr</span></a></li><li><a href="https://www.linkedin.com/in/daherk"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg> <span class="username">daherk</span></a></li></ul>
+</div>
+		</div>
+
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

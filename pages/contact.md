@@ -1,5 +1,0 @@
-## Contact
-
-### Linkedin
-
-myurl is
