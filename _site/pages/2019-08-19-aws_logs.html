@@ -60,7 +60,7 @@
 
 <p>So I login, go to CloudTrail, and look at a large table of indecipherable resource and user UIDs.</p>
 
-<p><img src="images/aws_logs_cloudtrail.png" alt="CloudTrail table" /></p>
+<p><img src="/pages/images/aws_logs_cloudtrail.png" alt="CloudTrail table" /></p>
 
 <p>As it happens, I was interested in a few different columns, so I displayed them in that table. The already overloaded table became totally unusable. I downloaded the exportable CSV file and filtered it with Excel. Unfortunately though, I could not find what I was looking for in that file. Why? I was using CloudTrail in the wrong region, obviously.</p>
 
@@ -70,7 +70,7 @@
 
 <p>We use AWS <a href="https://aws.amazon.com/kinesis/data-firehose/">Kinesis Firehose</a> to transfer data from point A to point B. To check the pipeline’s health, Firehose’s home page provides a monitoring tab that looks like this:</p>
 
-<p><img src="images/aws_logs_firehose.png" alt="Firehose health monitoring" /></p>
+<p><img src="/pages/images/aws_logs_firehose.png" alt="Firehose health monitoring" /></p>
 
 <p>A fine dashboard, that only goes 7 days back. If you want to check your pipeline’s health over a longer time span, you’ll need to go to CloudWatch.</p>
 
@@ -82,7 +82,7 @@
 
 <p>The default CloudWatch Logs view of a given log stream looks like this.</p>
 
-<p><img src="images/aws_logs_cwl.png" alt="CloudWatch Logs table" /></p>
+<p><img src="/pages/images/aws_logs_cwl.png" alt="CloudWatch Logs table" /></p>
 
 <p>I would personally prefer not to be reading that all day long.</p>
 
@@ -202,7 +202,7 @@ Creating multiple S3 buckets for log storage is simple. AWS provides S3 bucket <
 
 <h4 id="architecture-overview">Architecture overview</h4>
 
-<p><img src="images/aws_logs_archilogsaws3_noaccounts.png" alt="Log ingestion architecture" /></p>
+<p><img src="/pages/images/aws_logs_archilogsaws3_noaccounts.png" alt="Log ingestion architecture" /></p>
 
 <h4 id="to-s3-and-beyond">To S3 and beyond</h4>
 
@@ -228,7 +228,7 @@ Creating multiple S3 buckets for log storage is simple. AWS provides S3 bucket <
 
 <h4 id="architecture-overview-1">Architecture overview</h4>
 
-<p><img src="images/aws_logs_archilogsaws3.png" alt="Log ingestion architecture" /></p>
+<p><img src="/pages/images/aws_logs_archilogsaws3.png" alt="Log ingestion architecture" /></p>
 
 <h3 id="the-gotchas">The gotchas</h3>
 
