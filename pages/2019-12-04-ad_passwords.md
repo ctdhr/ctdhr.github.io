@@ -2,7 +2,7 @@
 layout: post
 title: "Auditing AD user passwords"
 categories: IT, security, active directory, passwords, audit, pentesting
-date: "19-08-2019"
+date: "04-12-2019"
 ---
 
 Say you're a blue teamer in an organisation of a few thousand people. Unless you're in a [kubernetized](https://kubernetes.io/), SaaSified and cloudified startup, you're likely to have an [Active Directory](https://en.wikipedia.org/wiki/Active_Directory) running. An AD and its accounts are a prime target for attackers, so how do you go about insuring your assets are a bit safer? Eliminating weak passwords is a start.
