@@ -49,7 +49,7 @@ It uses the excellent [DSInternals](https://github.com/MichaelGrafnetter/DSInter
 
 ### Recommendations
 
-I highly recommend running this tool on a machine separate from the actual AD server, as it consumes a lot of CPU horsepower. It also makes sense to run this on a machine only accessible to trustworthy persons since the results will be written directly to disk.
+I highly recommend running this tool on a machine separate from an actual [Domain Controller](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/b645c125-a7da-4097-84a1-2fa7cea07714#gt_76a05049-3531-4abd-aec8-30e19954b4bd), as it consumes a lot of CPU horsepower. It also makes sense to run this on a machine only accessible to trustworthy persons since the results will be written directly to disk.
 
 ## Takeaway
 
