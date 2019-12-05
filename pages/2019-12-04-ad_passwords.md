@@ -41,11 +41,11 @@ So your organisation probably has scores of weak passwords. What do you do now?
 
 The first step in eliminating weak passwords is knowing the weak passwords. To find the weakest passwords, you have to do some kind of password cracking attack.
 
-Not everyone has access to a [cluster of 448 Nvidia RTX 2080 with hashcat installed](https://twitter.com/TerahashCorp/status/1155128018156892160) though. But that's not a problem since a modern AD stores passwords on disk in [NTLM hash format](http://www.adshotgyan.com/2012/02/lm-hash-and-nt-hash.html). For compaitbility reasons, it also stores LM hashes by default. And both those hashes are rather quick to compute on a CPU.
+Not everyone has access to a [cluster of 448 Nvidia RTX 2080 with hashcat installed](https://twitter.com/TerahashCorp/status/1155128018156892160) though. But that's not a problem since a modern AD stores passwords on disk in [NTLM hash format](http://www.adshotgyan.com/2012/02/lm-hash-and-nt-hash.html). For compatibility reasons, it also stores LM hashes by default. And both those hashes are rather quick to compute on a CPU.
 
 So I've written a [PowerShell](https://en.wikipedia.org/wiki/PowerShell) script that launches a dictionary attack on all user passwords on an AD, and then outputs the results to a text file. [The code is available on Github](https://github.com/ctdhr/AD-Password-Auditor).
 
-It uses the excellent [DSInternals](https://github.com/MichaelGrafnetter/DSInternals) module and can run multiple threads to accelerate the cracking process. It does require a dictionary however. I've used [Mentalist](https://github.com/sc0tfree/mentalist) to generate the dictionaries I've used in my attacks. You can use various wordlists as well.
+It uses the excellent [DSInternals](https://github.com/MichaelGrafnetter/DSInternals) module and can run multiple threads to accelerate the cracking process. It does require a dictionary however. I've used [Mentalist](https://github.com/sc0tfree/mentalist) to generate the dictionaries used in my attacks. You can use various wordlists as well.
 
 ### Recommendations
 
