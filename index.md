@@ -16,6 +16,10 @@ title: ""
 # Blog posts
 ----------------------------------
 
+## [Build me a secure SaaS app](pages/2020-05-30-saas_security/index.md) <span style="font-size:60%;color:#a0a0a0">30th may 2020</span>
+
+When applying for an IT engineering job, meeting a few people at the target company and answering some technical questions is standard practice. Things get a bit more interesting when you have to present a security roadmap to all the company's technical leads.
+
 ## [Auditing AD user passwords](pages/2019-12-04-ad_passwords/index.md) <span style="font-size:60%;color:#a0a0a0">4th december 2019</span>
 
 Say you're a blue teamer in an organisation of a few thousand people. Unless you're in a [kubernetized](https://kubernetes.io/), SaaSified and cloudified startup, you're likely to have an [Active Directory](https://en.wikipedia.org/wiki/Active_Directory) running. ADs and their accounts are a prime target for attackers, so how do you go about insuring your assets are a bit safer? Eliminating weak passwords is a start.
