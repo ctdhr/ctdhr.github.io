@@ -52,7 +52,7 @@ This "case" covers a very wide range of topics _and_ goes into the technical nit
     width: 93%;
     height: 28px;
     padding: 18px;
-    background-color: #82b1ff;
+    background-color: #6090e2; //82b1ff
     vertical-align: top;
     border-top: 1px #2979ff;
     border-left: 1px #2979ff;
