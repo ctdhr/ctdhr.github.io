@@ -20,3 +20,4 @@ header_pages:
 plugins:
  - jekyll-feed
  - jekyll-seo-tag
+ - jekyll-sitemap
