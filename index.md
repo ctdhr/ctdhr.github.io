@@ -6,15 +6,14 @@
 # See: https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 #
 layout: home
-title: ""
+title: "Blog posts"
 ---
 
 <a href="https://dilbert.com/strip/2017-12-05" style="margin:auto;width:50%">
 ![Dilbert vs. Elbonian hackers](https://assets.amuniversal.com/5af325a0b04a0135ff38005056a9545d "Dilbert vs. Elbonian hackers")
 </a>
 
-# Blog posts
-----------------------------------
+&nbsp;
 
 ## [Build me a secure SaaS app](pages/2020-05-30-saas_security/index.md) <span style="font-size:60%;color:#a0a0a0">7th June 2020</span>
 
