@@ -5,19 +5,32 @@ categories: tips, linux, unix, terminal, cli
 date: "13-11-2020"
 ---
 
-Patate lorem ipsum est une patate
+As a security engineer, I spent most of my working day in a linux CLI environment. So I'd like to have the fastest & least resource hogging tool for the job.
 
-talk about 
+I did some research, and found two interesting takes on the issue, one on [lwn.net](https://lwn.net/Articles/751763/) and one on [danluu.com](https://danluu.com/term-latency/).
 
-https://lwn.net/Articles/751763/ 
+After reading that, I decided to try out xterm, so I ran `xterm`.
 
-https://danluu.com/term-latency/
+![Too bright, too small](images/no_arg_xterm.png)
 
+As you could see, there's a slight size and color issue.
 
-## Title
+I looked around xterm's man page, and managed to put together the following command to get a usable xterm.
 
-Lorem ipsum 
+```
+xterm \
+  -fa 'Monospace' \
+  -fs 12 \
+  -bg black \
+  -fg lightgray \
+  -sl 1000000 \
+  -aw \
+  -cr darkgreen \
+  -j +vb +mb \
+  -xrm 'XTerm*selectToClipboard: true' \
+  -xrm 'xterm*VT100.Translations: #override \ Ctrl Shift <Key>V:    insert-selection(CLIPBOARD) \n\ Ctrl Shift <Key>C:    copy-selection(CLIPBOARD)'
+```
 
-### Title 2
+![Just right](images/arg_xterm.png)
 
-A link is here: [IAM role](https://docs.aws.amazon.com/).
+It works much better now.
