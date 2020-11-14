@@ -5,7 +5,7 @@ categories: tips, linux, unix, terminal, cli
 date: "13-11-2020"
 ---
 
-As a security engineer, I spent most of my working day in a linux CLI environment. So I'd like to have the fastest & least resource hogging tool for the job.
+As a security engineer, I spend most of my working day in a linux CLI environment. So I'd like to have the fastest & least resource hogging tool for the job.
 
 I did some research, and found two interesting takes on the issue, one on [lwn.net](https://lwn.net/Articles/751763/) and one on [danluu.com](https://danluu.com/term-latency/).
 
