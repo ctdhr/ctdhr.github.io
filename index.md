@@ -15,6 +15,11 @@ title: "Blog posts"
 
 &nbsp;
 
+## [Laying log-pipes with Lambda](pages/2020-12-19-logging_lambda/index.md) <span style="font-size:60%;color:#a0a0a0">19th December 2020</span>
+
+If you ask the devops team running a SaaS service about the biggest weakness in their current production infrastructure, chances are they'll tell you "monitoring and logging".
+When the pressure to deliver is high on a devops team, as with any team, projects that do not directly contribute to serving stakeholders are put on hold, ergo the previous answer.
+
 ## [Build me a secure SaaS app](pages/2020-05-30-saas_security/index.md) <span style="font-size:60%;color:#a0a0a0">7th June 2020</span>
 
 When applying for an IT engineering job, meeting a few people at the target company and answering some technical questions is standard practice. Things get a bit more interesting when you have to present a security roadmap to all the company's technical leads.
