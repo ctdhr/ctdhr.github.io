@@ -61,7 +61,7 @@ Hard coding the credentials in the Lambda's code is obviously out of the questio
 
 ### Never lose a log file
 
-Losing logs is not acceptable, so this system will must handle common failure modes (e.g. network timeouts), and notify whenver an unrecoverable error occurs.
+Losing logs is not acceptable, so this system must handle common failure modes (e.g. network timeouts), and notify whenever an unrecoverable error occurs.
 
 ### Summing up the requirements
 
