@@ -8,6 +8,10 @@ Various bits & bobs about security, linux and other fun stuff.
 
 &nbsp;
 
+## [Kibana vs. Dashboards vs. UUID](2021-04-05-kibana-dashboards-uuid/index.md) <span style="font-size:60%;color:#a0a0a0">5th April 2020</span>
+
+Who will win? Not you.
+
 ## [Spice up your Gnome](2020-12-30-gnome_background_changer/index.md) <span style="font-size:60%;color:#a0a0a0">30th December 2020</span>
 
 Automatically change desktop backgrounds in Gnome.
