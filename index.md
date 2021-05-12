@@ -15,6 +15,11 @@ title: "Blog posts"
 
 &nbsp;
 
+## [Putting out non-existent fires](pages/2021-05-12-putting_out_fires/index.md) <span style="font-size:60%;color:#a0a0a0">12th May 2021</span>
+
+On a random September afternoon, Daniel, a colleague, rings me up.
+He tells me that a privileged user account on our B2B SaaS website had been hacked, and that we had received an email from the affected user, Zoe, as well as the CISO of the company she works at.
+
 ## [Laying log-pipes with Lambda](pages/2020-12-19-logging_lambda/index.md) <span style="font-size:60%;color:#a0a0a0">19th December 2020</span>
 
 If you ask the devops team running a SaaS service about the biggest weakness in their current production infrastructure, chances are they'll tell you "monitoring and logging".
