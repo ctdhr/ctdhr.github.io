@@ -182,7 +182,7 @@ Here are a few code snippets that will hopefully help you replicate our Firehose
 
 IAM policy:
 
-```
+```json
     {
         "Statement": [
             {
@@ -202,7 +202,7 @@ IAM policy:
 
 Trust policy:
 
-```
+```json
     {
       "Version": "2012-10-17",
       "Statement": [
@@ -221,7 +221,7 @@ Trust policy:
 
 IAM policy:
 
-```
+```json
     {
         "Statement": [
             {
@@ -245,7 +245,7 @@ IAM policy:
 
 Trust policy:
 
-```
+```json
     {
       "Version": "2012-10-17",
       "Statement": [
@@ -270,7 +270,7 @@ Trust policy:
 
 #### S3 bucket policy
 
-```
+```json
     {
         "Version": "2012-10-17",
         "Statement": [
