@@ -7,7 +7,7 @@ date: "07-06-2020"
 
 When applying for an IT engineering job, meeting a few people at the target company and answering some technical questions is standard practice. Things get a bit more interesting when you have to present a security roadmap to all the company's technical leads.
 
-## Interviews
+## [Interviews](#interviews)
 
 A few months ago, I applied to a security engineering role at a French scale-up, let's call it ACME. I went through the first couple of interviews and everything was going fine. For the third one, I was sent a case study to complete beforehand.
 
@@ -81,7 +81,7 @@ This "case" covers a very wide range of topics _and_ goes into the technical nit
 }
 </style>
 
-## The answer
+## [The answer](#the-answer)
 
 It took me 2 days to prepare the slide deck, so I'm sharing my work with you.
 

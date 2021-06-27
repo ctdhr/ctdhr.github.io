@@ -12,7 +12,7 @@ I tried finding an app that automatically changes backgrounds for me, but most s
 
 So I did it with a cronjob, using a locally stored image library.
 
-## Background changer script
+## [Background changer script](#background-changer-script)
 
 ```bash
 #!/bin/bash
@@ -30,7 +30,7 @@ DBUS_SESSION_BUS_ADDRESS=$(grep -z DBUS_SESSION_BUS_ADDRESS /proc/$PID/environ |
 ```
 
 
-## crontab
+## [crontab](#crontab)
 
 Add this line to your crontab to run the script every 15 minutes.
 

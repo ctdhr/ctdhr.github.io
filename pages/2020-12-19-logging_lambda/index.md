@@ -14,7 +14,7 @@ When the pressure to deliver is high on a devops team, as with any team, project
 
 That means that the organisation's security team is, at worst, flying blind, and at best, going through hoops and loops to get their job done.
 
-## New logs, new problems
+## [New logs, new problems](#new-logs-new-problems)
 
 This was the situation I was in recently. I was working on adding a new security solution to the SaaS delivery infrastructure that my colleagues and I maintain.
 This solution could only dump its logs to S3 buckets, and I needed a way to transfer those logs to the log analysis platform.
@@ -24,7 +24,7 @@ In this instance, it was an [Elasticsearch](https://www.elastic.co/elasticsearch
 
 So once again, I had to come up with my own pipeline.
 
-## How *not* to fly blind
+## [How *not* to fly blind](#how-not-to-fly-blind)
 
 ### Filebeat
 
@@ -46,7 +46,7 @@ Enter [Lambdas](https://aws.amazon.com/lambda/). For this particular case, a Lam
 In this scenario, the log producer aggregated logs by default before pushing them to S3, so we were never going to get real time logs in Elasticsearch.
 As such, the small latency added by a Lambda's spin up is no issue. If low latency was a requirement, a Lambda wouldn't be the right tool.
 
-## Requirements
+## [Requirements](#requirements)
 
 First off, let's analyze what our pipeline needs to do.
 
@@ -73,7 +73,7 @@ Losing logs is not acceptable, so this system must handle common failure modes (
 
 > Req :three: An alert must be fired if a log fail fails to be indexed after multiple retries.
 
-## The nitty gritty
+## [The nitty gritty](#the-nitty-gritty)
 
 This is what the pipeline ended up looking like.
 
@@ -132,7 +132,7 @@ Of course, I took the time to work out all the quirks to get it to a stable stat
 * Not all SQS messages have the same structure
   - The Lambda's code must be able to handle shape-shifting messages
 
-## Wrapping up
+## [Wrapping up](#wrapping-up)
 
 Lambdas are yet another tool to add to a security engineer's arsenal.
 They're quite nifty when it comes to handling small recurring workloads with minimal upfront time investment.

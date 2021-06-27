@@ -9,7 +9,7 @@ date: "19-08-2019"
 
 As we migrate our IT systems to the [AWS](https://aws.amazon.com/) cloud, it is imperative for us to be able to monitor their health and security. AWS does provide a range of tools for logging, however they feel fragmented and balky at times. Looking through logs in the dedicated AWS services was awkward at best, frustrating at worst, and definitely time-consuming. We needed a centralised, robust log storage and management infrastructure that we could control. So I built one!
 
-## Why need needed something else
+## [Why we needed something else](#why-we-needed-something-else)
 
 To best describe why we felt limited by AWS' "default" logging services, we will look at a few real world cases.
 
@@ -49,7 +49,7 @@ I would personally prefer not to be reading that all day long.
 >
 > JSON log one-liners are better off on some disk somewhere than on your screen. We're used to neat monitoring solutions such as [Prometheus](https://prometheus.io/) and [Splunk](https://www.splunk.com/). We would like to keep using them. So all we need to do now is feed them with all those new AWS logs.
 
-## Our log management infrastructure
+## [Our log management infrastructure](#our-log-management-infrastructure)
 
 ### Requirements
 
@@ -146,7 +146,7 @@ As previously stated, we use multiple monitoring tools. Downloading batches of f
 
 From here on in, it's a matter of configuring your favourite log management app to handle what you'd like to send its way.
 
-## What we learned
+## [What we learned](#what-we-learned)
 
 ### Security stuff
 
@@ -324,7 +324,7 @@ When I built our log pipeline, we needed something that worked well quickly. So 
 
 While this architecture is not particularly expensive, as part of our continuous AWS cost management efforts, we are currently looking for better cost saving measures.
 
-## Takeaway
+## [Takeaway](#takeaway)
 
 Sending logs to storage seems simple enough, yet it took us a while to figure out, as we had to build a cloud specific architecture.
 

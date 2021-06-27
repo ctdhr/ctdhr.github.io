@@ -11,14 +11,14 @@ So I did the next best thing: a nice MOTD.
 
 ![MOTD example](images/motd.png)
 
-## Inspiration
+## [Inspiration](#inspiration)
 
 A friend who's also an IT engineer showed me this [reddit post](https://www.reddit.com/r/unixporn/comments/8gwcti/motd_ubuntu_server_1804_lts_my_motd_scripts_for/), and the associated [Github repo](https://github.com/Heholord/FalconStats/).
 
 These two articles were also quite useful [ownyourbits.com article](https://ownyourbits.com/2017/04/05/customize-your-motd-login-message-in-debian-and-ubuntu/) and [linuxconfig.org](https://linuxconfig.org/how-to-change-welcome-message-motd-on-ubuntu-18-04-server).
 
 
-## Scripts
+## [Scripts](#scripts)
 
 ### RAM usage
 
@@ -223,7 +223,7 @@ echo -e "   1min\t\t5min\t\t15min"
 echo -e "   $one\t\t$five\t\t$fifteen\n"
 ```
 
-## License
+## [License](#license)
 
 ### MIT License
 

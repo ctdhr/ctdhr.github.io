@@ -7,7 +7,7 @@ date: "04-12-2019"
 
 Say you're a blue teamer in an organisation of a few thousand people. Unless you're in a [kubernetized](https://kubernetes.io/), SaaSified and cloudified startup, you're likely to have an [Active Directory](https://en.wikipedia.org/wiki/Active_Directory) running. An AD and its accounts are a prime target for attackers, so how do you go about insuring your assets are a bit safer? Eliminating weak passwords is a start.
 
-## AD accounts are a target
+## [AD accounts are a target](#ad-accounts-are-a-target)
 
 ### Context
 
@@ -37,7 +37,7 @@ This approach is less than ideal for the following reasons:
 
 So your organisation probably has scores of weak passwords. What do you do now?
 
-## Automated auditing for the win
+## [Automated auditing for the win](#automated-auditing-for-the-win)
 
 The first step in eliminating weak passwords is knowing the weak passwords. To find the weakest passwords, you have to do some kind of password cracking attack.
 
@@ -51,7 +51,7 @@ It uses the excellent [DSInternals](https://github.com/MichaelGrafnetter/DSInter
 
 I highly recommend running this tool on a machine separate from an actual [Domain Controller](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/b645c125-a7da-4097-84a1-2fa7cea07714#gt_76a05049-3531-4abd-aec8-30e19954b4bd), as it consumes a lot of CPU horsepower. It also makes sense to run this on a machine only accessible to trustworthy persons since the results will be written directly to disk.
 
-## Takeaway
+## [Takeaway](#takeaway)
 
 Running an automated password audit regularly allows me to track the weakest passwords in my organisation and identify the points I need to spend time on during my next security awareness trainings.
 
