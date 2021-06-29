@@ -15,6 +15,12 @@ title: "Blog posts"
 
 &nbsp;
 
+## [Selecting a Mac EDR agent](pages/2021-06-30-selecting_mac_edr/index.md) <span style="font-size:60%;color:#a0a0a0">30th June 2021</span>
+
+My organisation recently migrated all its workstations from Windows boxes to MacOS devices.
+The Windows fleet was equipped with a remotely managed anti-virus software.
+We needed to maintain a similar level of protection, so I had to select the security agent that would be deployed on the new Mac fleet.
+
 ## [Putting out non-existent fires](pages/2021-05-12-putting_out_fires/index.md) <span style="font-size:60%;color:#a0a0a0">12th May 2021</span>
 
 On a random September afternoon, Daniel, a colleague, rings me up.
