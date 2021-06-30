@@ -12,7 +12,7 @@ We needed to maintain a similar level of protection, so I had to select the secu
 I spent a few days testing security software for Mac, and I'll be sharing with your my thought process on the matter.
 
 {:refdef: style="text-align: center;"}
-![Icons made by Freepik, from www.flaticon.com](images/malware_v_mac.png "Icons made by Freepik, from www.flaticon.com"){:height="300px"}
+![Icons made by Freepik, from www.flaticon.com](images/malware_v_mac.png "Icons made by Freepik, from www.flaticon.com"){:width="50%"}
 {: refdef}
 
 
